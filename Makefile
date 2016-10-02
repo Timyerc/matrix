@@ -736,6 +736,7 @@ MATRIX_SRC = \
 		   drivers/inverter.c \
 		   drivers/fm_rtc6705.c \
 		   io/flashfs.c \
+		   io/vtx.c \
 		   $(HIGHEND_SRC) \
 		   $(COMMON_SRC) \
 		   $(VCP_SRC)

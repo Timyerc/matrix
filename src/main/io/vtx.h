@@ -17,10 +17,9 @@
 
 #pragma once
 
-extern uint16_t const vtx_freq[];
-extern uint8_t current_vtx_channel;
+typedef struct vtxConfig_s {
+	uint8_t vtx_channel;
+	uint8_t vtx_power;
+} vtxConfig_t;
 
-void rtc6705_init(void);
-void rtc6705_writeDataStream(uint8_t address, uint32_t data);
-uint32_t rtc6705_readDataStream(uint8_t address);
-void rtc6705_setChannel(uint16_t channel_freq);
+PG_DECLARE(vtxConfig_t, vtxConfig);

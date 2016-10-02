@@ -49,6 +49,7 @@
 #include "drivers/bus_i2c.h"
 #include "drivers/sdcard.h"
 #include "drivers/buf_writer.h"
+#include "drivers/fm_rtc6705.h"
 
 #include "rx/rx.h"
 #include "rx/msp.h"
@@ -67,6 +68,7 @@
 #include "io/msp_protocol.h"
 #include "io/serial_msp.h"
 #include "io/serial_4way.h"
+#include "io/vtx.h"
 
 #include "telemetry/telemetry.h"
 
@@ -1040,7 +1042,12 @@ static int processOutCommand(mspPacket_t *cmd, mspPacket_t *reply)
             mspEnterEsc4way = true;     // request protocol switch
             break;
 #endif
-
+#ifdef USE_RTC6705
+        case MSP_VTX_CONFIG:
+            sbufWriteU8(dst, current_vtx_channel);
+            sbufWriteU8(dst, 0);
+            break;
+#endif
         default:
             return 0;   // unknown command
     }
@@ -1052,6 +1059,7 @@ static int processInCommand(mspPacket_t *cmd)
 {
     sbuf_t * src = &cmd->buf;
     int len = sbufBytesRemaining(src);
+    int ch;
 
     switch (cmd->cmd) {
         case MSP_SELECT_SETTING:
@@ -1512,7 +1520,17 @@ static int processInCommand(mspPacket_t *cmd)
             }
             break;
 #endif
-
+#ifdef USE_RTC6705
+        case MSP_SET_VTX_CONFIG:
+            ch = sbufReadU8(src);
+            if (ch < 40)
+                vtxConfig()->vtx_channel = ch;
+            if (current_vtx_channel != vtxConfig()->vtx_channel) {
+                current_vtx_channel = vtxConfig()->vtx_channel;
+                rtc6705_setChannel(vtx_freq[current_vtx_channel]);
+            }
+            break;
+#endif
         case MSP_REBOOT:
             isRebootScheduled = true;
             break;

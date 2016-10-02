@@ -168,6 +168,9 @@
 #define MSP_LED_STRIP_MODECOLOR         86 //out message         Get LED strip mode_color settings
 #define MSP_SET_LED_STRIP_MODECOLOR     87 //in  message         Set LED strip mode_color settings
 
+#define MSP_VTX_CONFIG									88
+#define MSP_SET_VTX_CONFIG							89
+
 //
 // Baseflight MSP commands (if enabled they exist in Cleanflight)
 //

@@ -134,6 +134,7 @@
 #define M25P16_CS_PIN           GPIO_Pin_12
 #define M25P16_SPI_INSTANCE     SPI2
 
+#define USE_RTC6705
 #define RTC6705_LE_GPIO   GPIOA
 #define RTC6705_LE_PIN    Pin_4
 #define RTC6705_LE_PERIPHERAL RCC_AHBPeriph_GPIOA

@@ -79,6 +79,7 @@
 #include "io/msp.h"
 #include "io/serial_msp.h"
 #include "io/serial_cli.h"
+#include "io/vtx.h"
 
 #include "sensors/sensors.h"
 #include "sensors/sonar.h"
@@ -322,11 +323,11 @@ void init(void)
 
     delay(2000);
 
+#ifdef USE_RTC6705
     rtc6705_init();
-    
-    //rtc6705_writeDataStream(0x01, 0x4758D);
-
-    rtc6705_setChannel(vtx_freq[8]);
+    current_vtx_channel = vtxConfig()->vtx_channel;
+    rtc6705_setChannel(vtx_freq[current_vtx_channel]);
+#endif
 
     timerInit();  // timer must be initialized before any channel is allocated
 

@@ -46,6 +46,8 @@ const uint16_t vtx_freq[] =
     5658, 5695, 5732, 5769, 5806, 5843, 5880, 5917, // RaceBand
 };
 
+uint8_t current_vtx_channel;
+
 void rtc6705_init(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
