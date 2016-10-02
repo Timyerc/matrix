@@ -61,6 +61,7 @@
 #include "drivers/usb_io.h"
 #include "drivers/transponder_ir.h"
 #include "drivers/gyro_sync.h"
+#include "drivers/fm_rtc6705.h"
 
 #include "rx/rx.h"
 #include "rx/spektrum.h"
@@ -225,6 +226,8 @@ void buttonsHandleColdBootButtonPresses(void)
 
 #endif
 
+uint32_t reg = 0;
+
 void init(void)
 {
     drv_pwm_config_t pwm_params;
@@ -317,7 +320,13 @@ void init(void)
     }
 #endif
 
-    delay(100);
+    delay(2000);
+
+    rtc6705_init();
+    
+    //rtc6705_writeDataStream(0x01, 0x4758D);
+
+    rtc6705_setChannel(vtx_freq[8]);
 
     timerInit();  // timer must be initialized before any channel is allocated
 
