@@ -28,7 +28,7 @@
 #define BEEP_PERIPHERAL RCC_AHBPeriph_GPIOC
 #define BEEPER_INVERTED
 
-#define USABLE_TIMER_CHANNEL_COUNT 5
+#define USABLE_TIMER_CHANNEL_COUNT 6
 
 #define GYRO
 #define USE_GYRO_MPU6050
@@ -150,8 +150,8 @@
 
 
 #define ADC_INSTANCE                ADC1
-#define ADC_DMA_CHANNEL             DMA2_Channel1
-#define ADC_AHB_PERIPHERAL          RCC_AHBPeriph_DMA2
+#define ADC_DMA_CHANNEL             DMA1_Channel1
+#define ADC_AHB_PERIPHERAL          RCC_AHBPeriph_DMA1
 
 #define VBAT_ADC_GPIO               GPIOA
 #define VBAT_ADC_GPIO_PIN           GPIO_Pin_1

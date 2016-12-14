@@ -395,9 +395,9 @@ const timerHardware_t timerHardware[USABLE_TIMER_CHANNEL_COUNT] = {
 const timerHardware_t timerHardware[USABLE_TIMER_CHANNEL_COUNT] = {
     { TIM2,  GPIOB, Pin_11, TIM_Channel_4, TIM2_IRQn,               0, Mode_AF_PP, GPIO_PinSource11, GPIO_AF_1}, // RC_CH4 - PB11 - *TIM2_CH4, UART3_RX (AF7)
 
-    { TIM15, GPIOA, Pin_2,  TIM_Channel_1, TIM1_BRK_TIM15_IRQn,     1, Mode_AF_PP, GPIO_PinSource2,  GPIO_AF_9},  // PWM1 - PA2
-    { TIM15, GPIOA, Pin_3,  TIM_Channel_2, TIM1_BRK_TIM15_IRQn,     1, Mode_AF_PP, GPIO_PinSource3,  GPIO_AF_9},  // PWM2 - PA3
-    { TIM4,  GPIOB, Pin_6,  TIM_Channel_1, TIM4_IRQn,               1, Mode_AF_PP, GPIO_PinSource6,  GPIO_AF_2},  // PWM3 - PB6
+    { TIM15, GPIOA, Pin_3,  TIM_Channel_2, TIM1_BRK_TIM15_IRQn,     1, Mode_AF_PP, GPIO_PinSource3,  GPIO_AF_9},  // PWM1 - PA3
+    { TIM4,  GPIOB, Pin_6,  TIM_Channel_1, TIM4_IRQn,               1, Mode_AF_PP, GPIO_PinSource6,  GPIO_AF_2},  // PWM2 - PB6
+    { TIM15, GPIOA, Pin_2,  TIM_Channel_1, TIM1_BRK_TIM15_IRQn,     1, Mode_AF_PP, GPIO_PinSource2,  GPIO_AF_9},  // PWM3 - PA2
     { TIM4,  GPIOB, Pin_7,  TIM_Channel_2, TIM4_IRQn,               1, Mode_AF_PP, GPIO_PinSource7,  GPIO_AF_2},  // PWM4 - PB7
 
     { TIM1,  GPIOA, Pin_8,  TIM_Channel_1, TIM1_CC_IRQn,            1, Mode_AF_PP, GPIO_PinSource8,  GPIO_AF_6},  // GPIO_TIMER / LED_STRIP

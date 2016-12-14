@@ -18,3 +18,9 @@ docs/Manual.pdf
 README.pdf
 
 /Debug/
+.tags
+.tags_sorted_by_file
+matrix.sublime-project
+matrix.sublime-workspace
+src/main/.tags
+src/main/.tags_sorted_by_file
