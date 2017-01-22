@@ -41,8 +41,8 @@
 #include "io/serial_msp.h"
 #include "io/serial_4way.h"
 
-STATIC_UNIT_TESTED mspPort_t mspPorts[MAX_MSP_PORT_COUNT];
-
+//STATIC_UNIT_TESTED mspPort_t mspPorts[MAX_MSP_PORT_COUNT];
+mspPort_t mspPorts[MAX_MSP_PORT_COUNT];
 // assign serialPort to mspPort
 // free mspPort when serialPort is NULL
 static void resetMspPort(mspPort_t *mspPortToReset, serialPort_t *serialPort)

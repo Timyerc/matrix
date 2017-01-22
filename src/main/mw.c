@@ -920,3 +920,8 @@ void taskTransponder(void)
     }
 }
 #endif
+
+void taskHandleUartBridge(void)
+{
+    handleUartBridge();
+}

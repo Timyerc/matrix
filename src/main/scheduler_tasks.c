@@ -38,6 +38,7 @@ void taskTelemetry(void);
 void taskLedStrip(void);
 void taskTransponder(void);
 void taskSystem(void);
+void taskHandleUartBridge(void);
 
 cfTask_t cfTasks[TASK_COUNT] = {
     [TASK_SYSTEM] = {
@@ -172,4 +173,10 @@ cfTask_t cfTasks[TASK_COUNT] = {
         .staticPriority = TASK_PRIORITY_IDLE,
     },
 #endif
+    [TASK_UARTBRIDGE] = {
+        .taskName = "UARTBRIDGE",
+        .taskFunc = taskHandleUartBridge,
+        .desiredPeriod = 1000000 / 1000,         // 100 Hz should be enough to flush up to 115 bytes @ 115200 baud
+        .staticPriority = TASK_PRIORITY_REALTIME,
+    },
 };

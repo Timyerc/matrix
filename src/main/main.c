@@ -729,6 +729,7 @@ int main(void) {
 #ifdef TRANSPONDER
     setTaskEnabled(TASK_TRANSPONDER, feature(FEATURE_TRANSPONDER));
 #endif
+    setTaskEnabled(TASK_UARTBRIDGE, false);
 
     while (true) {
         scheduler();

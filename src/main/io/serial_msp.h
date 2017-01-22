@@ -79,6 +79,8 @@ typedef struct mspPort_s {
     uint8_t inBuf[MSP_PORT_INBUF_SIZE];
 } mspPort_t;
 
+extern mspPort_t mspPorts[MAX_MSP_PORT_COUNT];
+
 void mspSerialInit(void);
 void mspSerialProcess();
 void mspSerialAllocatePorts(void);

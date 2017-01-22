@@ -275,6 +275,7 @@ COMMON_SRC = build_config.c \
 		   io/serial_4way_stk500v2.c \
 		   io/serial_cli.c \
 		   io/serial_msp.c \
+		   io/serial_bridge.c\
 		   io/statusindicator.c \
 		   io/msp.c \
 		   rx/rx.c \

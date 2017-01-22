@@ -46,6 +46,7 @@
 #include "io/serial.h"
 #include "serial_cli.h"
 #include "serial_msp.h"
+#include "serial_bridge.h"
 
 #include "config/config.h"
 #include "config/parameter_group.h"
@@ -451,6 +452,11 @@ void handleSerial(void)
 #endif
 
     mspSerialProcess();
+}
+
+void handleUartBridge(void)
+{
+    bridgeSerialProcess();
 }
 
 void waitForSerialPortToFinishTransmitting(serialPort_t *serialPort)

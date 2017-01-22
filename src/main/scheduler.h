@@ -78,6 +78,8 @@ typedef enum {
     TASK_TRANSPONDER,
 #endif
 
+    TASK_UARTBRIDGE,
+
     /* Count of real tasks */
     TASK_COUNT,
 
