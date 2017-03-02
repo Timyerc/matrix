@@ -68,7 +68,7 @@ PG_RESET_TEMPLATE(batteryConfig_t, batteryConfig,
     .vbatmaxcellvoltage = 43,
     .vbatmincellvoltage = 33,
     .vbatwarningcellvoltage = 35,
-    .currentMeterScale = 400, // for Allegro ACS758LCB-100U (40mV/A)
+    .currentMeterScale = 340, // for Allegro ACS758LCB-100U (40mV/A)
     .currentMeterType = CURRENT_SENSOR_ADC,
 );
 

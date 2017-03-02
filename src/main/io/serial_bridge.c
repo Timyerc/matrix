@@ -30,12 +30,12 @@ void bridgeSerialProcess(void)
 	while (serialRxBytesWaiting(mspPorts[0].port)) {
 	    uint8_t c = serialRead(mspPorts[0].port);
 
-	    serialBeginWrite(mspPorts[1].port);
-	    serialWrite(mspPorts[1].port, c);
-	    serialEndWrite(mspPorts[1].port);
+	    serialBeginWrite(mspPorts[2].port);
+	    serialWrite(mspPorts[2].port, c);
+	    serialEndWrite(mspPorts[2].port);
 	}
-	while (serialRxBytesWaiting(mspPorts[1].port)) {
-	    uint8_t c = serialRead(mspPorts[1].port);
+	while (serialRxBytesWaiting(mspPorts[2].port)) {
+	    uint8_t c = serialRead(mspPorts[2].port);
 
 	    serialBeginWrite(mspPorts[0].port);
 	    serialWrite(mspPorts[0].port, c);

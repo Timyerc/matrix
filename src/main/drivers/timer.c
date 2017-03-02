@@ -393,7 +393,7 @@ const timerHardware_t timerHardware[USABLE_TIMER_CHANNEL_COUNT] = {
 
 #if defined(MATRIX)
 const timerHardware_t timerHardware[USABLE_TIMER_CHANNEL_COUNT] = {
-    { TIM2,  GPIOB, Pin_11, TIM_Channel_4, TIM2_IRQn,               0, Mode_AF_PP, GPIO_PinSource11, GPIO_AF_1}, // RC_CH4 - PB11 - *TIM2_CH4, UART3_RX (AF7)
+    { TIM3,  GPIOB, Pin_0, TIM_Channel_3, TIM3_IRQn,                0, Mode_AF_PP, GPIO_PinSource0,  GPIO_AF_2}, // RC_CH4 - PB11 - *TIM2_CH4, UART3_RX (AF7)
 
     { TIM15, GPIOA, Pin_3,  TIM_Channel_2, TIM1_BRK_TIM15_IRQn,     1, Mode_AF_PP, GPIO_PinSource3,  GPIO_AF_9},  // PWM1 - PA3
     { TIM4,  GPIOB, Pin_6,  TIM_Channel_1, TIM4_IRQn,               1, Mode_AF_PP, GPIO_PinSource6,  GPIO_AF_2},  // PWM2 - PB6
@@ -403,9 +403,9 @@ const timerHardware_t timerHardware[USABLE_TIMER_CHANNEL_COUNT] = {
     { TIM1,  GPIOA, Pin_8,  TIM_Channel_1, TIM1_CC_IRQn,            1, Mode_AF_PP, GPIO_PinSource8,  GPIO_AF_6},  // GPIO_TIMER / LED_STRIP
 };
 
-#define USED_TIMERS  (TIM_N(1) | TIM_N(2) | TIM_N(4) | TIM_N(15))
+#define USED_TIMERS  (TIM_N(1) | TIM_N(3) | TIM_N(4) | TIM_N(15))
 
-#define TIMER_APB1_PERIPHERALS (RCC_APB1Periph_TIM2 | RCC_APB1Periph_TIM4)
+#define TIMER_APB1_PERIPHERALS (RCC_APB1Periph_TIM3 | RCC_APB1Periph_TIM4)
 #define TIMER_APB2_PERIPHERALS (RCC_APB2Periph_TIM1 | RCC_APB2Periph_TIM15)
 #define TIMER_AHB_PERIPHERALS (RCC_AHBPeriph_GPIOA | RCC_AHBPeriph_GPIOB)
 

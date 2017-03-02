@@ -41,6 +41,7 @@
 #include "drivers/system.h"
 #include "drivers/serial.h"
 #include "drivers/gyro_sync.h"
+#include "drivers/fm_rtc6705.h"
 
 #include "io/rc_controls.h"
 #include "io/rate_profile.h"
@@ -280,6 +281,10 @@ void mwDisarm(void)
     if (ARMING_FLAG(ARMED)) {
         DISABLE_ARMING_FLAG(ARMED);
 
+        if(RTC6705_POWER_ON_FLAG()) {
+            DISABLE_RTC6705_POWER_ON_FLAG();
+        }
+
 #ifdef BLACKBOX
         if (feature(FEATURE_BLACKBOX)) {
             finishBlackbox();
@@ -311,6 +316,11 @@ void mwArm(void)
         }
         if (!ARMING_FLAG(PREVENT_ARMING)) {
             ENABLE_ARMING_FLAG(ARMED);
+
+            if(!RTC6705_POWER_ON_FLAG()) {
+                ENABLE_RTC6705_POWER_ON_FLAG();
+            }
+
             headFreeModeHold = DECIDEGREES_TO_DEGREES(attitude.values.yaw);
 
 #ifdef BLACKBOX

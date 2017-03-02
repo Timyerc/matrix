@@ -17,10 +17,26 @@
 
 #pragma once
 
+#include "gpio.h"
+#include "system.h"
+
 extern uint16_t const vtx_freq[];
 extern uint8_t current_vtx_channel;
+
+#define RTC6705_POWER_ON      GPIO_ResetBits(RTC6705_POWER_SW_GPIO, RTC6705_POWER_SW_PIN)
+#define RTC6705_POWER_OFF     GPIO_SetBits(RTC6705_POWER_SW_GPIO, RTC6705_POWER_SW_PIN)
+
+extern uint8_t rtc6705PowerOnFlag;
 
 void rtc6705_init(void);
 void rtc6705_writeDataStream(uint8_t address, uint32_t data);
 uint32_t rtc6705_readDataStream(uint8_t address);
 void rtc6705_setChannel(uint16_t channel_freq);
+
+#define DISABLE_RTC6705_POWER_ON_FLAG() {rtc6705PowerOnFlag = 0; RTC6705_POWER_OFF;}
+#define ENABLE_RTC6705_POWER_ON_FLAG() {rtc6705PowerOnFlag = 1; \
+																				RTC6705_POWER_ON; \
+																				delay(100); \
+																				rtc6705_setChannel(vtx_freq[current_vtx_channel]);}
+																				
+#define RTC6705_POWER_ON_FLAG() (rtc6705PowerOnFlag)

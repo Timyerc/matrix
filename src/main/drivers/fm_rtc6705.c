@@ -37,6 +37,8 @@
 #define RTC6705_DAT_HIGH      GPIO_SetBits(RTC6705_DAT_GPIO,   RTC6705_DAT_PIN)
 #define RTC6705_DAT_LOW       GPIO_ResetBits(RTC6705_DAT_GPIO, RTC6705_DAT_PIN)
 
+uint8_t rtc6705PowerOnFlag = 0;
+
 const uint16_t vtx_freq[] =
 {
     5865, 5845, 5825, 5805, 5785, 5765, 5745, 5725, // Boacam A
@@ -68,8 +70,17 @@ void rtc6705_init(void)
   GPIO_InitStructure.GPIO_Pin = RTC6705_DAT_PIN;
   GPIO_Init(RTC6705_DAT_GPIO, &GPIO_InitStructure);
 
+  RCC_AHBPeriphClockCmd(RTC6705_POWER_SW_PERIPHERAL, ENABLE);
+  GPIO_InitStructure.GPIO_Pin = RTC6705_POWER_SW_PIN;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  GPIO_Init(RTC6705_POWER_SW_GPIO, &GPIO_InitStructure);
+
   //DISABLE_RTC6705;
   //RTC6705_CLK_HIGH;
+  DISABLE_RTC6705_POWER_ON_FLAG();
 }
 
 void rtc6705_datPinOut(void)

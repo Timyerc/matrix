@@ -321,12 +321,16 @@ void init(void)
     }
 #endif
 
-    delay(2000);
+    delay(100);
 
 #ifdef USE_RTC6705
     rtc6705_init();
+    //ENABLE_RTC6705_POWER_ON_FLAG();
+    delay(1000);
     current_vtx_channel = vtxConfig()->vtx_channel;
-    rtc6705_setChannel(vtx_freq[current_vtx_channel]);
+    //rtc6705_setChannel(vtx_freq[current_vtx_channel]);
+    //delay(100);
+    //DISABLE_RTC6705_POWER_ON_FLAG();
 #endif
 
     timerInit();  // timer must be initialized before any channel is allocated
