@@ -281,9 +281,9 @@ void mwDisarm(void)
     if (ARMING_FLAG(ARMED)) {
         DISABLE_ARMING_FLAG(ARMED);
 
-        if(RTC6705_POWER_ON_FLAG()) {
+        /*if(RTC6705_POWER_ON_FLAG()) {
             DISABLE_RTC6705_POWER_ON_FLAG();
-        }
+        }*/
 
 #ifdef BLACKBOX
         if (feature(FEATURE_BLACKBOX)) {
@@ -934,4 +934,20 @@ void taskTransponder(void)
 void taskHandleUartBridge(void)
 {
     handleUartBridge();
+}
+
+void taskHandleVtxSwitch(void)
+{
+    static uint8_t vtxTurnOffDelay = 0;
+
+    if (ARMING_FLAG(ARMED)) {
+        vtxTurnOffDelay = 0;
+    } else {
+        if(++vtxTurnOffDelay > 60) {
+            vtxTurnOffDelay = 60;
+            if(RTC6705_POWER_ON_FLAG()) {
+                DISABLE_RTC6705_POWER_ON_FLAG();
+            }
+        }
+    }
 }

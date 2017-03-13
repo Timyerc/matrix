@@ -80,6 +80,8 @@ typedef enum {
 
     TASK_UARTBRIDGE,
 
+    TASK_VTXSWITCH,
+
     /* Count of real tasks */
     TASK_COUNT,
 

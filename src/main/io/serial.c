@@ -80,6 +80,8 @@ void pgResetFn_serialConfig(serialConfig_t *serialConfig)
     serialConfig->portConfigs[1].functionMask = FUNCTION_MSP;
 #endif
 
+    serialConfig->portConfigs[2].functionMask = FUNCTION_MSP;
+
     serialConfig->reboot_character = 'R';
 }
 

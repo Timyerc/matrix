@@ -36,7 +36,7 @@ void rtc6705_setChannel(uint16_t channel_freq);
 #define DISABLE_RTC6705_POWER_ON_FLAG() {rtc6705PowerOnFlag = 0; RTC6705_POWER_OFF;}
 #define ENABLE_RTC6705_POWER_ON_FLAG() {rtc6705PowerOnFlag = 1; \
 																				RTC6705_POWER_ON; \
-																				delay(100); \
+																				delay(200); \
 																				rtc6705_setChannel(vtx_freq[current_vtx_channel]);}
 																				
 #define RTC6705_POWER_ON_FLAG() (rtc6705PowerOnFlag)
