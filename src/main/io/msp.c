@@ -1048,6 +1048,29 @@ static int processOutCommand(mspPacket_t *cmd, mspPacket_t *reply)
             sbufWriteU8(dst, 0);
             break;
 #endif
+        case MSP_IPX: {
+            uint8_t sub_cmd = sbufReadU8(src);
+            switch(sub_cmd)
+            {
+                case IPX_NULL:
+                    sbufWriteU8(dst, IPX_NULL);
+                    break;
+                case IPX_UBRIDGE:
+                    ipxSerialMode = IPXSERIAL_UBRIDGE;
+                    sbufWriteU8(dst, IPX_UBRIDGE);
+                    break;
+                case IPX_BBRIDGE:
+                    ipxSerialMode = IPXSERIAL_BBRIDGE;
+                    sbufWriteU8(dst, IPX_BBRIDGE);
+                    break;
+                case IPX_MSP:
+                    ipxSerialMode = IPXSERIAL_MSP;
+                    sbufWriteU8(dst, IPX_MSP);
+                    break;
+                default:
+                    return 0;
+            }
+        }
         default:
             return 0;   // unknown command
     }

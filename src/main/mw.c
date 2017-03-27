@@ -757,6 +757,8 @@ void taskMainPidLoopChecker(void) {
     }
 
     taskMainPidLoop();
+
+    handleUartBridge();
 }
 
 void taskUpdateAccelerometer(void)

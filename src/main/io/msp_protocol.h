@@ -171,6 +171,12 @@
 #define MSP_VTX_CONFIG									88
 #define MSP_SET_VTX_CONFIG							89
 
+#define MSP_IPX													235
+#define IPX_NULL												0
+#define IPX_UBRIDGE											1
+#define IPX_BBRIDGE											2
+#define IPX_MSP													3
+
 //
 // Baseflight MSP commands (if enabled they exist in Cleanflight)
 //

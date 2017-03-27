@@ -47,6 +47,13 @@ typedef enum {
     BAUD_250000,
 } baudRate_e;
 
+typedef enum {
+    IPXSERIAL_MSP = 0,
+    IPXSERIAL_UBRIDGE,
+    IPXSERIAL_BBRIDGE,
+} ipxSerialMode_e;
+
+extern ipxSerialMode_e ipxSerialMode;
 extern const uint32_t baudRates[];
 
 // serial port identifiers are now fixed, these values are used by MSP commands.

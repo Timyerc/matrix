@@ -443,22 +443,27 @@ bool serialIsPortAvailable(serialPortIdentifier_e identifier)
     return false;
 }
 
+ipxSerialMode_e ipxSerialMode = IPXSERIAL_MSP;
 void handleSerial(void)
 {
+    if(ipxSerialMode == IPXSERIAL_MSP) {
 #ifdef USE_CLI
-    // in cli mode, all serial stuff goes to here. enter cli mode by sending #
-    if (cliMode) {
-        cliProcess();
-        return;
-    }
+        // in cli mode, all serial stuff goes to here. enter cli mode by sending #
+        if (cliMode) {
+            cliProcess();
+            return;
+        }
 #endif
 
-    mspSerialProcess();
+        mspSerialProcess();
+    }
 }
 
 void handleUartBridge(void)
 {
-    bridgeSerialProcess();
+    if(ipxSerialMode != IPXSERIAL_MSP) {
+        bridgeSerialProcess();
+    }
 }
 
 void waitForSerialPortToFinishTransmitting(serialPort_t *serialPort)
