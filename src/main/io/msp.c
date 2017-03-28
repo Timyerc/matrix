@@ -1067,6 +1067,14 @@ static int processOutCommand(mspPacket_t *cmd, mspPacket_t *reply)
                     ipxSerialMode = IPXSERIAL_MSP;
                     sbufWriteU8(dst, IPX_MSP);
                     break;
+                case IPX_UOSDUPLOAD:
+                    ipxSerialMode = IPXSERIAL_UOSDUPLOAD;
+                    sbufWriteU8(dst, IPX_UOSDUPLOAD);
+                    break;
+                case IPX_BOSDUPLOAD:
+                    ipxSerialMode = IPXSERIAL_BOSDUPLOAD;
+                    sbufWriteU8(dst, IPX_BOSDUPLOAD);
+                    break;
                 default:
                     return 0;
             }

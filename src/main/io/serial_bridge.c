@@ -26,6 +26,27 @@
 #include "io/serial_4way.h"
 #include "io/serial_bridge.h"
 
+#include "drivers/gpio.h"
+#include "drivers/system.h"
+
+#define SET_OSD       GPIO_ResetBits(OSD_DTR_GPIO, OSD_DTR_PIN)
+#define RESET_OSD     GPIO_SetBits(OSD_DTR_GPIO, OSD_DTR_PIN)
+
+void serialBridgeInit(void)
+{
+		GPIO_InitTypeDef GPIO_InitStructure;
+
+	  RCC_AHBPeriphClockCmd(OSD_DTR_PERIPHERAL, ENABLE);
+	  GPIO_InitStructure.GPIO_Pin = OSD_DTR_PIN;
+	  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	  GPIO_Init(OSD_DTR_GPIO, &GPIO_InitStructure);
+
+	  GPIO_ResetBits(OSD_DTR_GPIO, OSD_DTR_PIN);
+}
+
 static uint8_t bridgeSerialChecksum(uint8_t checksum, uint8_t byte)
 {
     return checksum ^ byte;
@@ -128,106 +149,112 @@ static int bridgeMspProcess(mspPacket_t *cmd, mspPacket_t *reply)
 void bridgeSerialProcess(void)
 {
 	mspPort_t *msp;
-	if(ipxSerialMode == IPXSERIAL_UBRIDGE) {
+	if(ipxSerialMode == IPXSERIAL_UBRIDGE || ipxSerialMode == IPXSERIAL_UOSDUPLOAD) {
 			msp = &mspPorts[0];
-	} else if(ipxSerialMode == IPXSERIAL_BBRIDGE) {
+	} else if(ipxSerialMode == IPXSERIAL_BBRIDGE || ipxSerialMode == IPXSERIAL_BOSDUPLOAD) {
 			msp = &mspPorts[1];
 	} else {
 		msp = NULL;
 	}
-	while (serialRxBytesWaiting(msp->port)) {
-	    //uint8_t c = serialRead(msp->port);
 
-	    uint8_t c = serialRead(msp->port);
-      bool consumed = bridgeSerialProcessReceivedByte(&mspPorts[0], c);
+	if(ipxSerialMode == IPXSERIAL_UOSDUPLOAD || ipxSerialMode == IPXSERIAL_BOSDUPLOAD) {
+		RESET_OSD;
+	} else {
+		SET_OSD;
+		while (serialRxBytesWaiting(msp->port)) {
+		    //uint8_t c = serialRead(msp->port);
 
-      if (!consumed && !ARMING_FLAG(ARMED)) {
-          evaluateOtherData(msp->port, c);
-      }
+		    uint8_t c = serialRead(msp->port);
+	      bool consumed = bridgeSerialProcessReceivedByte(&mspPorts[0], c);
 
-      if (msp->c_state == COMMAND_RECEIVED) {
+	      if (!consumed && !ARMING_FLAG(ARMED)) {
+	          evaluateOtherData(msp->port, c);
+	      }
 
-      		mspPacket_t command = {
-			        .buf = {
-			            .ptr = msp->inBuf,
-			            .end = msp->inBuf + msp->dataSize,
-			        },
-			        .cmd = msp->cmdMSP,
-			        .result = 0,
-			    };
-			    static uint8_t outBuf[MSP_PORT_OUTBUF_SIZE];
-			    mspPacket_t reply = {
-			        .buf = {
-			            .ptr = outBuf,
-			            .end = ARRAYEND(outBuf),
-			        },
-			        .cmd = -1,
-			        .result = 0,
-			    };
-			    
-			    if(bridgeMspProcess(&command, &reply)) {
-			        // reply should be sent back
-			        sbufSwitchToReader(&reply.buf, outBuf);     // change streambuf direction
-			        serialBeginWrite(msp->port);
-					    int len = sbufBytesRemaining(&reply.buf);
-					    uint8_t hdr[] = {'$', 'M', reply.result < 0 ? '!' : '>', len, reply.cmd};
-					    uint8_t csum = 0;                                       // initial checksum value
-					    serialWriteBuf(msp->port, hdr, sizeof(hdr));
-					    csum = bridgeSerialChecksumBuf(csum, hdr + 3, 2);          // checksum starts from len field
-					    if(len > 0) {
-					        serialWriteBuf(msp->port, sbufPtr(&reply.buf), len);
-					        csum = bridgeSerialChecksumBuf(csum, sbufPtr(&reply.buf), len);
-					    }
-					    serialWrite(msp->port, csum);
-					    serialEndWrite(msp->port);
-			    }else {
-		          serialBeginWrite(mspPorts[2].port);
-					    int len = sbufBytesRemaining(&command.buf);
-					    uint8_t hdr[] = {'$', 'M', '>', len, command.cmd};
-					    uint8_t csum = 0;                                       // initial checksum value
-					    serialWriteBuf(mspPorts[2].port, hdr, sizeof(hdr));
-					    csum = bridgeSerialChecksumBuf(csum, hdr + 3, 2);          // checksum starts from len field
-					    if(len > 0) {
-					        serialWriteBuf(mspPorts[2].port, sbufPtr(&command.buf), len);
-					        csum = bridgeSerialChecksumBuf(csum, sbufPtr(&command.buf), len);
-					    }
-					    serialWrite(mspPorts[2].port, csum);
-					    serialEndWrite(mspPorts[2].port);
-			  	}
-			    msp->c_state = IDLE;
-      }
-	}
-	while (serialRxBytesWaiting(mspPorts[2].port)) {
-			uint8_t c = serialRead(mspPorts[2].port);
-      bool consumed = bridgeSerialProcessReceivedByte(&mspPorts[2], c);
+	      if (msp->c_state == COMMAND_RECEIVED) {
 
-      if (!consumed && !ARMING_FLAG(ARMED)) {
-          evaluateOtherData(mspPorts[2].port, c);
-      }
+	      		mspPacket_t command = {
+				        .buf = {
+				            .ptr = msp->inBuf,
+				            .end = msp->inBuf + msp->dataSize,
+				        },
+				        .cmd = msp->cmdMSP,
+				        .result = 0,
+				    };
+				    static uint8_t outBuf[MSP_PORT_OUTBUF_SIZE];
+				    mspPacket_t reply = {
+				        .buf = {
+				            .ptr = outBuf,
+				            .end = ARRAYEND(outBuf),
+				        },
+				        .cmd = -1,
+				        .result = 0,
+				    };
+				    
+				    if(bridgeMspProcess(&command, &reply)) {
+				        // reply should be sent back
+				        sbufSwitchToReader(&reply.buf, outBuf);     // change streambuf direction
+				        serialBeginWrite(msp->port);
+						    int len = sbufBytesRemaining(&reply.buf);
+						    uint8_t hdr[] = {'$', 'M', reply.result < 0 ? '!' : '>', len, reply.cmd};
+						    uint8_t csum = 0;                                       // initial checksum value
+						    serialWriteBuf(msp->port, hdr, sizeof(hdr));
+						    csum = bridgeSerialChecksumBuf(csum, hdr + 3, 2);          // checksum starts from len field
+						    if(len > 0) {
+						        serialWriteBuf(msp->port, sbufPtr(&reply.buf), len);
+						        csum = bridgeSerialChecksumBuf(csum, sbufPtr(&reply.buf), len);
+						    }
+						    serialWrite(msp->port, csum);
+						    serialEndWrite(msp->port);
+				    }else {
+			          serialBeginWrite(mspPorts[2].port);
+						    int len = sbufBytesRemaining(&command.buf);
+						    uint8_t hdr[] = {'$', 'M', '>', len, command.cmd};
+						    uint8_t csum = 0;                                       // initial checksum value
+						    serialWriteBuf(mspPorts[2].port, hdr, sizeof(hdr));
+						    csum = bridgeSerialChecksumBuf(csum, hdr + 3, 2);          // checksum starts from len field
+						    if(len > 0) {
+						        serialWriteBuf(mspPorts[2].port, sbufPtr(&command.buf), len);
+						        csum = bridgeSerialChecksumBuf(csum, sbufPtr(&command.buf), len);
+						    }
+						    serialWrite(mspPorts[2].port, csum);
+						    serialEndWrite(mspPorts[2].port);
+				  	}
+				    msp->c_state = IDLE;
+	      }
+		}
+		while (serialRxBytesWaiting(mspPorts[2].port)) {
+				uint8_t c = serialRead(mspPorts[2].port);
+	      bool consumed = bridgeSerialProcessReceivedByte(&mspPorts[2], c);
 
-      if (mspPorts[2].c_state == COMMAND_RECEIVED) {
+	      if (!consumed && !ARMING_FLAG(ARMED)) {
+	          evaluateOtherData(mspPorts[2].port, c);
+	      }
 
-      		mspPacket_t command = {
-			        .buf = {
-			            .ptr = mspPorts[2].inBuf,
-			            .end = mspPorts[2].inBuf + mspPorts[2].dataSize,
-			        },
-			        .cmd = mspPorts[2].cmdMSP,
-			        .result = 0,
-			    };
-          serialBeginWrite(msp->port);
-			    int len = sbufBytesRemaining(&command.buf);
-			    uint8_t hdr[] = {'$', 'M', '<', len, command.cmd};
-			    uint8_t csum = 0;                                       // initial checksum value
-			    serialWriteBuf(msp->port, hdr, sizeof(hdr));
-			    csum = bridgeSerialChecksumBuf(csum, hdr + 3, 2);          // checksum starts from len field
-			    if(len > 0) {
-			        serialWriteBuf(msp->port, sbufPtr(&command.buf), len);
-			        csum = bridgeSerialChecksumBuf(csum, sbufPtr(&command.buf), len);
-			    }
-			    serialWrite(msp->port, csum);
-			    serialEndWrite(msp->port);
-			    mspPorts[2].c_state = IDLE;
-      }
+	      if (mspPorts[2].c_state == COMMAND_RECEIVED) {
+
+	      		mspPacket_t command = {
+				        .buf = {
+				            .ptr = mspPorts[2].inBuf,
+				            .end = mspPorts[2].inBuf + mspPorts[2].dataSize,
+				        },
+				        .cmd = mspPorts[2].cmdMSP,
+				        .result = 0,
+				    };
+	          serialBeginWrite(msp->port);
+				    int len = sbufBytesRemaining(&command.buf);
+				    uint8_t hdr[] = {'$', 'M', '<', len, command.cmd};
+				    uint8_t csum = 0;                                       // initial checksum value
+				    serialWriteBuf(msp->port, hdr, sizeof(hdr));
+				    csum = bridgeSerialChecksumBuf(csum, hdr + 3, 2);          // checksum starts from len field
+				    if(len > 0) {
+				        serialWriteBuf(msp->port, sbufPtr(&command.buf), len);
+				        csum = bridgeSerialChecksumBuf(csum, sbufPtr(&command.buf), len);
+				    }
+				    serialWrite(msp->port, csum);
+				    serialEndWrite(msp->port);
+				    mspPorts[2].c_state = IDLE;
+	      }
+		}
 	}
 }

@@ -176,6 +176,8 @@
 #define IPX_UBRIDGE											1
 #define IPX_BBRIDGE											2
 #define IPX_MSP													3
+#define IPX_UOSDUPLOAD									4
+#define IPX_BOSDUPLOAD									5
 
 //
 // Baseflight MSP commands (if enabled they exist in Cleanflight)

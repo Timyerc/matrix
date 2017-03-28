@@ -79,6 +79,7 @@
 #include "io/msp.h"
 #include "io/serial_msp.h"
 #include "io/serial_cli.h"
+#include "io/serial_bridge.h"
 #include "io/vtx.h"
 
 #include "sensors/sensors.h"
@@ -329,6 +330,8 @@ void init(void)
     delay(100);
     ENABLE_RTC6705_POWER_ON_FLAG();
 #endif
+
+    serialBridgeInit();
 
     timerInit();  // timer must be initialized before any channel is allocated
 

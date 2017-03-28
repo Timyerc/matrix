@@ -51,6 +51,8 @@ typedef enum {
     IPXSERIAL_MSP = 0,
     IPXSERIAL_UBRIDGE,
     IPXSERIAL_BBRIDGE,
+    IPXSERIAL_UOSDUPLOAD,
+    IPXSERIAL_BOSDUPLOAD,
 } ipxSerialMode_e;
 
 extern ipxSerialMode_e ipxSerialMode;
