@@ -1079,6 +1079,7 @@ static int processOutCommand(mspPacket_t *cmd, mspPacket_t *reply)
                     return 0;
             }
         }
+        break;
         default:
             return 0;   // unknown command
     }

@@ -53,6 +53,7 @@ typedef enum {
     IPXSERIAL_BBRIDGE,
     IPXSERIAL_UOSDUPLOAD,
     IPXSERIAL_BOSDUPLOAD,
+    IPXSERIAL_ENDOSDUPLOAD,
 } ipxSerialMode_e;
 
 extern ipxSerialMode_e ipxSerialMode;

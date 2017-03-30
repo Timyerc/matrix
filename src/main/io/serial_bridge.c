@@ -133,11 +133,16 @@ static int bridgeMspProcess(mspPacket_t *cmd, mspPacket_t *reply)
                     ipxSerialMode = IPXSERIAL_MSP;
                     sbufWriteU8(dst, IPX_MSP);
                     break;
+                case IPX_ENDOSDUPLOAD:
+                		ipxSerialMode = IPXSERIAL_ENDOSDUPLOAD;
+                		sbufWriteU8(dst, IPX_ENDOSDUPLOAD);
+                		break;
                 default:
                 		reply->result = 0;
                     return 0;
             }
         }
+        break;
         default:
         		reply->result = 0;
             return 0;   // unknown command
@@ -146,12 +151,12 @@ static int bridgeMspProcess(mspPacket_t *cmd, mspPacket_t *reply)
     return 1;
 }
 
-uint8_t tranBuf[128] = {0x82,0x00,0xdb,0xd3,0x82,0x00,0xe0,0xb7,0x82,0x00,0xe0,0xb8,0x82,0x00,0xe0,0xb9,0x82,0x00,0xe0,0xba,0x82,0x00,0xe0,0xbb,0x82,0x00,0xe0,0xbc,0x82,0x00,0xe0,0xbd,0x82,0x00,0xe0,0xbe,0x82,0x00,0xe0,0xbf,0x82,0x00,0xe0,0x9a,0x82,0x00,0xe0,0x9a,0x82,0x00,0xe0,0xc0,0x82,0x00,0xd9,0x38,0x82,0x00,0xe0,0xc1,0x82,0x00,0xe0,0xc2,0x82,0x00,0xe0,0xc3,0x82,0x00,0xe0,0xc4,0x82,0x00,0xe0,0xc5,0x82,0x00,0xe0,0x9a,0x82,0x00,0xe0,0x9a,0x82,0x00,0xe0,0xc6,0x82,0x00,0xe0,0xc7,0x82,0x00,0xd8,0x24,0x82,0x00,0xe0,0xc8,0x82,0x00,0xe0,0xc9,0x82,0x00,0xe0,0xca,0x82,0x00,0xe0,0x9a,0x82,0x00,0xe0,0x9a,0x82,0x00,0xe0,0x9a,0x82,0x00,0xe0,0x9a,0x82,0x00,0xe0,0x9a};
-uint8_t tranRamBuf1[128] = {0x5f,0x3f,0x90,0x3f,0x96,0x72,0x09,0x00,0x8e,0x16,0xcd,0x60,0x65,0xb6,0x90,0xe7,0x00,0x5c,0x4c,0xb7,0x90,0xa1,0x21,0x26,0xf1,0xa6,0x20,0xb7,0x88,0x5f,0x3f,0x90,0xe6,0x00,0xa1,0x20,0x26,0x07,0x3f,0x8a,0xae,0x40,0x00,0x20,0x0c,0x3f,0x8a,0xae,0x00,0x80,0x42,0x58,0x58,0x58,0x1c,0x80,0x00,0x90,0x5f,0xcd,0x60,0x65,0x9e,0xb7,0x8b,0x9f,0xb7,0x8c,0xa6,0x20,0xc7,0x50,0x5b,0x43,0xc7,0x50,0x5c,0x4f,0x92,0xbd,0x00,0x8a,0x5c,0x9f,0xb7,0x8c,0x4f,0x92,0xbd,0x00,0x8a,0x5c,0x9f,0xb7,0x8c,0x4f,0x92,0xbd,0x00,0x8a,0x5c,0x9f,0xb7,0x8c,0x4f,0x92,0xbd,0x00,0x8a,0x72,0x00,0x50,0x5f,0x07,0x72,0x05,0x50,0x5f,0xfb,0x20,0x04,0x72,0x10,0x00,0x96,0x90,0xa3,0x00};
-uint8_t tranRamBuf2[128] = {0x07,0x27,0x0a,0x90,0x5c,0x1d,0x00,0x03,0x1c,0x00,0x80,0x20,0xae,0xb6,0x90,0xb1,0x88,0x27,0x1c,0x5f,0x3c,0x90,0xb6,0x90,0x97,0xcc,0x00,0xc0,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x81,0xcd,0x60,0x65,0x5f,0x3f,0x97,0x72,0x0d,0x00,0x8e,0x18,0x72,0x00,0x00,0x94,0x0b,0xa6,0x01,0xc7,0x50,0x5b,0x43,0xc7,0x50,0x5c,0x20,0x08,0x35,0x81,0x50,0x5b,0x35,0x7e,0x50,0x5c,0x3f,0x94,0xf6,0x92,0xa7,0x00,0x8a,0x72,0x0c,0x00,0x8e,0x13,0x72,0x00,0x50,0x5f,0x07,0x72,0x05,0x50,0x5f,0xfb,0x20,0x04,0x72,0x10,0x00,0x97,0xcd,0x60,0x65,0x9f,0xb1,0x88,0x27,0x03,0x5c,0x20,0xdb,0x72,0x0d,0x00,0x8e,0x10,0x72};
-uint8_t tranRamBuf3[48] = {0x00,0x50,0x5f,0x07,0x72,0x05,0x50,0x5f,0xfb,0x20,0x24,0x72,0x10,0x00,0x97,0x20,0x1e,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x81};
-static void writeOsdRam(void)
+static uint8_t writeOsdRam(void)
 {
+	uint8_t tranRamBuf1[128] = {0x5f,0x3f,0x90,0x3f,0x96,0x72,0x09,0x00,0x8e,0x16,0xcd,0x60,0x65,0xb6,0x90,0xe7,0x00,0x5c,0x4c,0xb7,0x90,0xa1,0x21,0x26,0xf1,0xa6,0x20,0xb7,0x88,0x5f,0x3f,0x90,0xe6,0x00,0xa1,0x20,0x26,0x07,0x3f,0x8a,0xae,0x40,0x00,0x20,0x0c,0x3f,0x8a,0xae,0x00,0x80,0x42,0x58,0x58,0x58,0x1c,0x80,0x00,0x90,0x5f,0xcd,0x60,0x65,0x9e,0xb7,0x8b,0x9f,0xb7,0x8c,0xa6,0x20,0xc7,0x50,0x5b,0x43,0xc7,0x50,0x5c,0x4f,0x92,0xbd,0x00,0x8a,0x5c,0x9f,0xb7,0x8c,0x4f,0x92,0xbd,0x00,0x8a,0x5c,0x9f,0xb7,0x8c,0x4f,0x92,0xbd,0x00,0x8a,0x5c,0x9f,0xb7,0x8c,0x4f,0x92,0xbd,0x00,0x8a,0x72,0x00,0x50,0x5f,0x07,0x72,0x05,0x50,0x5f,0xfb,0x20,0x04,0x72,0x10,0x00,0x96,0x90,0xa3,0x00};
+	uint8_t tranRamBuf2[128] = {0x07,0x27,0x0a,0x90,0x5c,0x1d,0x00,0x03,0x1c,0x00,0x80,0x20,0xae,0xb6,0x90,0xb1,0x88,0x27,0x1c,0x5f,0x3c,0x90,0xb6,0x90,0x97,0xcc,0x00,0xc0,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x81,0xcd,0x60,0x65,0x5f,0x3f,0x97,0x72,0x0d,0x00,0x8e,0x18,0x72,0x00,0x00,0x94,0x0b,0xa6,0x01,0xc7,0x50,0x5b,0x43,0xc7,0x50,0x5c,0x20,0x08,0x35,0x81,0x50,0x5b,0x35,0x7e,0x50,0x5c,0x3f,0x94,0xf6,0x92,0xa7,0x00,0x8a,0x72,0x0c,0x00,0x8e,0x13,0x72,0x00,0x50,0x5f,0x07,0x72,0x05,0x50,0x5f,0xfb,0x20,0x04,0x72,0x10,0x00,0x97,0xcd,0x60,0x65,0x9f,0xb1,0x88,0x27,0x03,0x5c,0x20,0xdb,0x72,0x0d,0x00,0x8e,0x10,0x72};
+	uint8_t tranRamBuf3[48] = {0x00,0x50,0x5f,0x07,0x72,0x05,0x50,0x5f,0xfb,0x20,0x24,0x72,0x10,0x00,0x97,0x20,0x1e,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x9d,0x81};
+
 	mspPort_t *msp;
 	if(ipxSerialMode == IPXSERIAL_UBRIDGE || ipxSerialMode == IPXSERIAL_UOSDUPLOAD) {
 			msp = &mspPorts[0];
@@ -175,9 +180,6 @@ static void writeOsdRam(void)
 		while (!serialRxBytesWaiting(mspPorts[2].port)) {};
 		c = serialRead(mspPorts[2].port);
 		serialWrite(mspPorts[2].port, c);
-		serialBeginWrite(msp->port);
-		serialWrite(msp->port, c);
-		serialEndWrite(msp->port);
 		if(c == 0x79) {
 			serialWrite(mspPorts[2].port, 0x7F);
 			serialWriteBuf(mspPorts[2].port, tranRamBuf1, 128);
@@ -185,30 +187,30 @@ static void writeOsdRam(void)
 			while (!serialRxBytesWaiting(mspPorts[2].port)) {};
 			c = serialRead(mspPorts[2].port);
 			serialWrite(mspPorts[2].port, c);
-			serialBeginWrite(msp->port);
-			serialWrite(msp->port, c);
-			serialEndWrite(msp->port);
 			if(c == 0x79) {
 			} else {
+				serialBeginWrite(msp->port);
+				serialWrite(msp->port, 0x11);
+				serialEndWrite(msp->port);
 				ipxSerialMode = IPXSERIAL_MSP;
 				SET_OSD;
-				return;
+				return 0;
 			}
 		} else {
 			serialBeginWrite(msp->port);
-			serialWrite(msp->port, c);
+			serialWrite(msp->port, 0x12);
 			serialEndWrite(msp->port);
 			ipxSerialMode = IPXSERIAL_MSP;
 			SET_OSD;
-			return;
+			return 0;
 		}
 	} else {
 		serialBeginWrite(msp->port);
-		serialWrite(msp->port, c);
+		serialWrite(msp->port, 0x13);
 		serialEndWrite(msp->port);
 		ipxSerialMode = IPXSERIAL_MSP;
 		SET_OSD;
-		return;
+		return 0;
 	}
 
 	serialWrite(mspPorts[2].port, 0x31);
@@ -225,9 +227,6 @@ static void writeOsdRam(void)
 		while (!serialRxBytesWaiting(mspPorts[2].port)) {};
 		c = serialRead(mspPorts[2].port);
 		serialWrite(mspPorts[2].port, c);
-		serialBeginWrite(msp->port);
-		serialWrite(msp->port, c);
-		serialEndWrite(msp->port);
 		if(c == 0x79) {
 			serialWrite(mspPorts[2].port, 0x7F);
 			serialWriteBuf(mspPorts[2].port, tranRamBuf2, 128);
@@ -235,30 +234,30 @@ static void writeOsdRam(void)
 			while (!serialRxBytesWaiting(mspPorts[2].port)) {};
 			c = serialRead(mspPorts[2].port);
 			serialWrite(mspPorts[2].port, c);
-			serialBeginWrite(msp->port);
-			serialWrite(msp->port, c);
-			serialEndWrite(msp->port);
 			if(c == 0x79) {
 			} else {
+				serialBeginWrite(msp->port);
+				serialWrite(msp->port, 0x14);
+				serialEndWrite(msp->port);
 				ipxSerialMode = IPXSERIAL_MSP;
 				SET_OSD;
-				return;
+				return 0;
 			}
 		} else {
 			serialBeginWrite(msp->port);
-			serialWrite(msp->port, c);
+			serialWrite(msp->port, 0x15);
 			serialEndWrite(msp->port);
 			ipxSerialMode = IPXSERIAL_MSP;
 			SET_OSD;
-			return;
+			return 0;
 		}
 	} else {
 		serialBeginWrite(msp->port);
-		serialWrite(msp->port, c);
+		serialWrite(msp->port, 0x16);
 		serialEndWrite(msp->port);
 		ipxSerialMode = IPXSERIAL_MSP;
 		SET_OSD;
-		return;
+		return 0;
 	}
 
 	serialWrite(mspPorts[2].port, 0x31);
@@ -275,9 +274,6 @@ static void writeOsdRam(void)
 		while (!serialRxBytesWaiting(mspPorts[2].port)) {};
 		c = serialRead(mspPorts[2].port);
 		serialWrite(mspPorts[2].port, c);
-		serialBeginWrite(msp->port);
-		serialWrite(msp->port, c);
-		serialEndWrite(msp->port);
 		if(c == 0x79) {
 			serialWrite(mspPorts[2].port, 0x2F);
 			serialWriteBuf(mspPorts[2].port, tranRamBuf3, 48);
@@ -285,18 +281,64 @@ static void writeOsdRam(void)
 			while (!serialRxBytesWaiting(mspPorts[2].port)) {};
 			c = serialRead(mspPorts[2].port);
 			serialWrite(mspPorts[2].port, c);
-			serialBeginWrite(msp->port);
-			serialWrite(msp->port, c);
-			serialEndWrite(msp->port);
 			if(c == 0x79) {
 			} else {
+				serialBeginWrite(msp->port);
+				serialWrite(msp->port, 0x17);
+				serialEndWrite(msp->port);
 				ipxSerialMode = IPXSERIAL_MSP;
 				SET_OSD;
-				return;
+				return 0;
 			}
 		} else {
 			serialBeginWrite(msp->port);
-			serialWrite(msp->port, c);
+			serialWrite(msp->port, 0x18);
+			serialEndWrite(msp->port);
+			ipxSerialMode = IPXSERIAL_MSP;
+			SET_OSD;
+			return 0;
+		}
+	} else {
+		serialBeginWrite(msp->port);
+		serialWrite(msp->port, 0x19);
+		serialEndWrite(msp->port);
+		ipxSerialMode = IPXSERIAL_MSP;
+		SET_OSD;
+		return 0;
+	}
+	return 1;
+}
+
+static void writeOsdGoto(void)
+{
+	mspPort_t *msp;
+	if(ipxSerialMode == IPXSERIAL_UBRIDGE || ipxSerialMode == IPXSERIAL_UOSDUPLOAD) {
+			msp = &mspPorts[0];
+	} else if(ipxSerialMode == IPXSERIAL_BBRIDGE || ipxSerialMode == IPXSERIAL_BOSDUPLOAD) {
+			msp = &mspPorts[1];
+	} else {
+		msp = NULL;
+	}
+
+	serialWrite(mspPorts[2].port, 0x21);
+	serialWrite(mspPorts[2].port, 0xDE);
+	while (!serialRxBytesWaiting(mspPorts[2].port)) {};
+	uint8_t c = serialRead(mspPorts[2].port);
+	serialWrite(mspPorts[2].port, c);
+	if(c == 0x79) {
+		serialWrite(mspPorts[2].port, 0x00);
+		serialWrite(mspPorts[2].port, 0x00);
+		serialWrite(mspPorts[2].port, 0x80);
+		serialWrite(mspPorts[2].port, 0x00);
+		serialWrite(mspPorts[2].port, 0x80);
+		while (!serialRxBytesWaiting(mspPorts[2].port)) {};
+		c = serialRead(mspPorts[2].port);
+		serialWrite(mspPorts[2].port, c);
+		if(c == 0x79) {
+			
+		} else {
+			serialBeginWrite(msp->port);
+			serialWrite(msp->port, 0x1F);
 			serialEndWrite(msp->port);
 			ipxSerialMode = IPXSERIAL_MSP;
 			SET_OSD;
@@ -304,13 +346,75 @@ static void writeOsdRam(void)
 		}
 	} else {
 		serialBeginWrite(msp->port);
-		serialWrite(msp->port, c);
+		serialWrite(msp->port, 0x1F);
 		serialEndWrite(msp->port);
 		ipxSerialMode = IPXSERIAL_MSP;
 		SET_OSD;
 		return;
 	}
+}
+uint32_t flashAddr = 0x00008000;
+void writeOsdFlash(mspPort_t *msp)
+{
+	serialBeginWrite(mspPorts[2].port);
+	serialWrite(mspPorts[2].port, 0x31);
+	serialWrite(mspPorts[2].port, 0xCE);
+	while (!serialRxBytesWaiting(mspPorts[2].port)) {};
+	uint8_t c = serialRead(mspPorts[2].port);
+	serialWrite(mspPorts[2].port, c);
+	uint8_t checksum = ((flashAddr>>8)&0x0FF) ^ (flashAddr&0x0FF);
+	if(c == 0x79) {
+		serialWrite(mspPorts[2].port, 0x00);
+		serialWrite(mspPorts[2].port, 0x00);
+		serialWrite(mspPorts[2].port, (flashAddr>>8)&0x0FF);
+		serialWrite(mspPorts[2].port, flashAddr&0x0FF);
+		serialWrite(mspPorts[2].port, checksum);
+		while (!serialRxBytesWaiting(mspPorts[2].port)) {};
+		c = serialRead(mspPorts[2].port);
+		serialWrite(mspPorts[2].port, c);
+		if(c == 0x79) {
+			serialWrite(mspPorts[2].port, msp->dataSize-2);
+			checksum = msp->dataSize-2;
+			for(uint8_t i =1; i<msp->dataSize; i++) {
+				checksum ^= msp->inBuf[i];
+			}
+			serialWriteBuf(mspPorts[2].port, &msp->inBuf[1], msp->dataSize-1);
+			serialWrite(mspPorts[2].port, checksum);
+			while (!serialRxBytesWaiting(mspPorts[2].port)) {};
+			c = serialRead(mspPorts[2].port);
+			serialWrite(mspPorts[2].port, c);
+			if(c == 0x79) {
+				serialBeginWrite(msp->port);
+				serialWrite(msp->port, 0x79);
+				serialEndWrite(msp->port);
+				flashAddr += 0x80;
+			} else {
+				serialBeginWrite(msp->port);
+				serialWrite(msp->port, 0x21);
+				serialEndWrite(msp->port);
+				ipxSerialMode = IPXSERIAL_MSP;
+				SET_OSD;
+				return;
+			}
+		} else {
+			serialBeginWrite(msp->port);
+			serialWrite(msp->port, 0x22);
+			serialEndWrite(msp->port);
+			ipxSerialMode = IPXSERIAL_MSP;
+			SET_OSD;
+			return;
+		}
+	} else {
+		serialBeginWrite(msp->port);
+		serialWrite(msp->port, 0x23);
+		serialEndWrite(msp->port);
+		ipxSerialMode = IPXSERIAL_MSP;
+		SET_OSD;
+		return;
+	}
+	serialEndWrite(mspPorts[2].port);
 }	
+
 void bridgeSerialProcess(void)
 {
 	mspPort_t *msp;
@@ -323,168 +427,101 @@ void bridgeSerialProcess(void)
 	}
 
 	if(ipxSerialMode == IPXSERIAL_UOSDUPLOAD || ipxSerialMode == IPXSERIAL_BOSDUPLOAD) {
-		/*while (serialRxBytesWaiting(mspPorts[0].port)) {
-        uint8_t c = serialRead(mspPorts[0].port);
-
-        serialBeginWrite(mspPorts[2].port);
-        serialWrite(mspPorts[2].port, c);
-        serialEndWrite(mspPorts[2].port);
-    }
-    while (serialRxBytesWaiting(mspPorts[2].port)) {
-        uint8_t c = serialRead(mspPorts[2].port);
-
-        serialBeginWrite(mspPorts[0].port);
-        serialWrite(mspPorts[0].port, c);
-        serialEndWrite(mspPorts[0].port);
-		}*/
-		RESET_OSD;
-		delay(500);
-		uint32_t flashAddr = 0x00008000;
-		serialBeginWrite(mspPorts[2].port);
-		serialWrite(mspPorts[2].port, 0x7F);
-		while (!serialRxBytesWaiting(mspPorts[2].port)) {};
-		uint8_t c = serialRead(mspPorts[2].port);
-		serialWrite(mspPorts[2].port, c);
-		if(c == 0x79) {
-			writeOsdRam();
-			while(1) {
-				serialWrite(mspPorts[2].port, 0x31);
-				serialWrite(mspPorts[2].port, 0xCE);
-				while (!serialRxBytesWaiting(mspPorts[2].port)) {};
-				c = serialRead(mspPorts[2].port);
-				serialWrite(mspPorts[2].port, c);
-				uint8_t checksum = ((flashAddr>>8)&0x0FF) ^ (flashAddr&0x0FF);
-				if(c == 0x79) {
-					serialWrite(mspPorts[2].port, 0x00);
-					serialWrite(mspPorts[2].port, 0x00);
-					serialWrite(mspPorts[2].port, (flashAddr>>8)&0x0FF);
-					serialWrite(mspPorts[2].port, flashAddr&0x0FF);
-					serialWrite(mspPorts[2].port, checksum);
-					while (!serialRxBytesWaiting(mspPorts[2].port)) {};
-					c = serialRead(mspPorts[2].port);
-					serialWrite(mspPorts[2].port, c);
+		uint8_t retryCnt=0;
+		while(retryCnt++<3) {
+			RESET_OSD;
+			delay(800);
+			serialBeginWrite(mspPorts[2].port);
+			serialWrite(mspPorts[2].port, 0x7F);
+			while (!serialRxBytesWaiting(mspPorts[2].port)) {};
+			uint8_t c = serialRead(mspPorts[2].port);
+			serialWrite(mspPorts[2].port, c);
+			if(c == 0x79) {
+				if(writeOsdRam() != 0) {
 					serialBeginWrite(msp->port);
-					serialWrite(msp->port, c);
+					serialWrite(msp->port, 0x79);
 					serialEndWrite(msp->port);
-					if(c == 0x79) {
-						serialWrite(mspPorts[2].port, 0x7F);
-						checksum = 0x7F;
-						for(uint8_t i =0; i<128; i++) {
-							checksum ^= tranBuf[i];
-						}
-						serialWriteBuf(mspPorts[2].port, tranBuf, 128);
-						serialWrite(mspPorts[2].port, checksum);
-						while (!serialRxBytesWaiting(mspPorts[2].port)) {};
-						c = serialRead(mspPorts[2].port);
-						serialWrite(mspPorts[2].port, c);
-						serialBeginWrite(msp->port);
-						serialWrite(msp->port, c);
-						serialEndWrite(msp->port);
-						if(c == 0x79) {
-							flashAddr += 0x80;
-							if(flashAddr == 0x00008800) {
-								flashAddr = 0x00008000;
-								ipxSerialMode = IPXSERIAL_MSP;
-								SET_OSD;
-								serialBeginWrite(msp->port);
-								serialWrite(msp->port, 0x88);
-								serialEndWrite(msp->port);
-								return;
-							}
-						} else {
-							ipxSerialMode = IPXSERIAL_MSP;
-							SET_OSD;
-							return;
-						}
-					} else {
-						serialBeginWrite(msp->port);
-						serialWrite(msp->port, c);
-						serialEndWrite(msp->port);
-						ipxSerialMode = IPXSERIAL_MSP;
-						SET_OSD;
-						return;
-					}
+					flashAddr = 0x00008000;
+					break;
 				} else {
-					serialBeginWrite(msp->port);
-					serialWrite(msp->port, c);
-					serialEndWrite(msp->port);
-					ipxSerialMode = IPXSERIAL_MSP;
 					SET_OSD;
-					return;
+					delay(1000);
 				}
-
+			}else {
+				SET_OSD;
+				delay(1000);
 			}
-		}	else {
+			serialEndWrite(mspPorts[2].port);
+		}
+		if(retryCnt>=3) {
 			serialBeginWrite(msp->port);
-			serialWrite(msp->port, c);
+			serialWrite(msp->port, 0x10);
 			serialEndWrite(msp->port);
 			ipxSerialMode = IPXSERIAL_MSP;
 			SET_OSD;
 			return;
 		}
-		serialEndWrite(mspPorts[2].port);
-		/*while (serialRxBytesWaiting(msp->port)) {
-		    //uint8_t c = serialRead(msp->port);
+		while(1) {
+			while (serialRxBytesWaiting(msp->port)) {
+			    uint8_t c = serialRead(msp->port);
+		      bool consumed = bridgeSerialProcessReceivedByte(msp, c);
 
-		    uint8_t c = serialRead(msp->port);
-	      bool consumed = bridgeSerialProcessReceivedByte(&mspPorts[0], c);
+		      if (!consumed && !ARMING_FLAG(ARMED)) {
+		          evaluateOtherData(msp->port, c);
+		      }
 
-	      if (!consumed && !ARMING_FLAG(ARMED)) {
-	          evaluateOtherData(msp->port, c);
-	      }
+		      if (msp->c_state == COMMAND_RECEIVED) {
 
-	      if (msp->c_state == COMMAND_RECEIVED) {
-
-	      		mspPacket_t command = {
-				        .buf = {
-				            .ptr = msp->inBuf,
-				            .end = msp->inBuf + msp->dataSize,
-				        },
-				        .cmd = msp->cmdMSP,
-				        .result = 0,
-				    };
-				    static uint8_t outBuf[MSP_PORT_OUTBUF_SIZE];
-				    mspPacket_t reply = {
-				        .buf = {
-				            .ptr = outBuf,
-				            .end = ARRAYEND(outBuf),
-				        },
-				        .cmd = -1,
-				        .result = 0,
-				    };
-				    
-				    if(bridgeMspProcess(&command, &reply)) {
-				        // reply should be sent back
-				        sbufSwitchToReader(&reply.buf, outBuf);     // change streambuf direction
-				        serialBeginWrite(msp->port);
-						    int len = sbufBytesRemaining(&reply.buf);
-						    uint8_t hdr[] = {'$', 'M', reply.result < 0 ? '!' : '>', len, reply.cmd};
-						    uint8_t csum = 0;                                       // initial checksum value
-						    serialWriteBuf(msp->port, hdr, sizeof(hdr));
-						    csum = bridgeSerialChecksumBuf(csum, hdr + 3, 2);          // checksum starts from len field
-						    if(len > 0) {
-						        serialWriteBuf(msp->port, sbufPtr(&reply.buf), len);
-						        csum = bridgeSerialChecksumBuf(csum, sbufPtr(&reply.buf), len);
-						    }
-						    serialWrite(msp->port, csum);
-						    serialEndWrite(msp->port);
-				    }else {
-			          serialBeginWrite(mspPorts[2].port);
-						    int len = sbufBytesRemaining(&command.buf);
-						    uint8_t hdr[] = {'$', 'M', '>', len, command.cmd};
-						    uint8_t csum = 0;                                       // initial checksum value
-						    serialWriteBuf(mspPorts[2].port, hdr, sizeof(hdr));
-						    csum = bridgeSerialChecksumBuf(csum, hdr + 3, 2);          // checksum starts from len field
-						    if(len > 0) {
-						        serialWriteBuf(mspPorts[2].port, sbufPtr(&command.buf), len);
-						        csum = bridgeSerialChecksumBuf(csum, sbufPtr(&command.buf), len);
-						    }
-						    serialWrite(mspPorts[2].port, csum);
-						    serialEndWrite(mspPorts[2].port);
-				  	}
-				    msp->c_state = IDLE;
-	      }
-		}*/
+		      		mspPacket_t command = {
+					        .buf = {
+					            .ptr = msp->inBuf,
+					            .end = msp->inBuf + msp->dataSize,
+					        },
+					        .cmd = msp->cmdMSP,
+					        .result = 0,
+					    };
+					    static uint8_t outBuf[MSP_PORT_OUTBUF_SIZE];
+					    mspPacket_t reply = {
+					        .buf = {
+					            .ptr = outBuf,
+					            .end = ARRAYEND(outBuf),
+					        },
+					        .cmd = -1,
+					        .result = 0,
+					    };
+					    
+					    if(bridgeMspProcess(&command, &reply)) {
+					        // reply should be sent back
+					        sbufSwitchToReader(&reply.buf, outBuf);     // change streambuf direction
+					        serialBeginWrite(msp->port);
+							    int len = sbufBytesRemaining(&reply.buf);
+							    uint8_t hdr[] = {'$', 'M', reply.result < 0 ? '!' : '>', len, reply.cmd};
+							    uint8_t csum = 0;                                       // initial checksum value
+							    serialWriteBuf(msp->port, hdr, sizeof(hdr));
+							    csum = bridgeSerialChecksumBuf(csum, hdr + 3, 2);          // checksum starts from len field
+							    if(len > 0) {
+							        serialWriteBuf(msp->port, sbufPtr(&reply.buf), len);
+							        csum = bridgeSerialChecksumBuf(csum, sbufPtr(&reply.buf), len);
+							    }
+							    serialWrite(msp->port, csum);
+							    serialEndWrite(msp->port);
+							    if(ipxSerialMode == IPXSERIAL_ENDOSDUPLOAD) {
+							    		ipxSerialMode = IPXSERIAL_MSP;
+							    		writeOsdGoto();
+							    		SET_OSD;
+							    		return;
+							    }
+					    }else {
+				          if(command.cmd == MSP_IPX) {
+				          		if(msp->inBuf[0]==IPX_UOSDUPLOAD || msp->inBuf[0]==IPX_BOSDUPLOAD) {
+				          				writeOsdFlash(msp);
+				          		}
+				          }
+					  	}
+					    msp->c_state = IDLE;
+		      }
+			}
+		}
 
 	} else {
 		SET_OSD;
