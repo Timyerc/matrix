@@ -42,6 +42,7 @@
 #define USE_BARO_FBM320
 
 #define MAG
+#define USE_MAG_AK8963
 #define USE_MAG_HMC5883
 #define MAG_HMC5883_ALIGN CW90_DEG
 
@@ -136,10 +137,10 @@
 
 #define USE_RTC6705
 #define RTC6705_LE_GPIO   GPIOA
-#define RTC6705_LE_PIN    Pin_4
+#define RTC6705_LE_PIN    Pin_0
 #define RTC6705_LE_PERIPHERAL RCC_AHBPeriph_GPIOA
 #define RTC6705_CLK_GPIO   GPIOA
-#define RTC6705_CLK_PIN    Pin_5
+#define RTC6705_CLK_PIN    Pin_1
 #define RTC6705_CLK_PERIPHERAL RCC_AHBPeriph_GPIOA
 #define RTC6705_DAT_GPIO   GPIOA
 #define RTC6705_DAT_PIN    Pin_7
@@ -156,21 +157,21 @@
 //#define BOARD_HAS_VOLTAGE_DIVIDER
 
 
-#define ADC_INSTANCE                ADC1
-#define ADC_DMA_CHANNEL             DMA1_Channel1
-#define ADC_AHB_PERIPHERAL          RCC_AHBPeriph_DMA1
+#define ADC_INSTANCE                ADC2
+#define ADC_DMA_CHANNEL             DMA2_Channel1
+#define ADC_AHB_PERIPHERAL          RCC_AHBPeriph_DMA2
 
 #define VBAT_ADC_GPIO               GPIOA
-#define VBAT_ADC_GPIO_PIN           GPIO_Pin_1
+#define VBAT_ADC_GPIO_PIN           GPIO_Pin_5
 #define VBAT_ADC_CHANNEL            ADC_Channel_2
 
 #define CURRENT_METER_ADC_GPIO      GPIOA
-#define CURRENT_METER_ADC_GPIO_PIN  GPIO_Pin_0
+#define CURRENT_METER_ADC_GPIO_PIN  GPIO_Pin_4
 #define CURRENT_METER_ADC_CHANNEL   ADC_Channel_1
 
-//#define RSSI_ADC_GPIO               GPIOB
-//#define RSSI_ADC_GPIO_PIN           GPIO_Pin_2
-//#define RSSI_ADC_CHANNEL            ADC_Channel_12
+#define RSSI_ADC_GPIO               GPIOB
+#define RSSI_ADC_GPIO_PIN           GPIO_Pin_2
+#define RSSI_ADC_CHANNEL            ADC_Channel_12
 
 #define LED_STRIP
 #define LED_STRIP_TIMER TIM1

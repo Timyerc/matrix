@@ -529,7 +529,7 @@ void bridgeSerialProcess(void)
 		    //uint8_t c = serialRead(msp->port);
 
 		    uint8_t c = serialRead(msp->port);
-	      bool consumed = bridgeSerialProcessReceivedByte(&mspPorts[0], c);
+	      bool consumed = bridgeSerialProcessReceivedByte(msp, c);
 
 	      if (!consumed && !ARMING_FLAG(ARMED)) {
 	          evaluateOtherData(msp->port, c);
