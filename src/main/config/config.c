@@ -90,11 +90,13 @@ STATIC_UNIT_TESTED void resetConf(void)
     featureSet(DEFAULT_FEATURES);
 #endif
 
-#ifdef BOARD_HAS_VOLTAGE_DIVIDER
+/*#ifdef BOARD_HAS_VOLTAGE_DIVIDER
     // only enable the VBAT feature by default if the board has a voltage divider otherwise
     // the user may see incorrect readings and unexpected issues with pin mappings may occur.
     featureSet(FEATURE_VBAT);
-#endif
+#endif*/
+    featureSet(FEATURE_VBAT | FEATURE_CURRENT_METER | FEATURE_RSSI_ADC);
+    featureSet(FEATURE_LED_STRIP);
 
 #if defined(COLIBRI_RACE)
     // alternative defaults settings for COLIBRI RACE targets

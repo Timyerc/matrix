@@ -147,44 +147,11 @@ static const ledConfig_t defaultLedStripConfig[] = {
 };
 #else
 static const ledConfig_t defaultLedStripConfig[] = {
-    { CALCULATE_LED_XY(15, 15), 0, LD(SOUTH) | LD(EAST) | LF(INDICATOR) | LF(ARM_STATE) },
-
-    { CALCULATE_LED_XY(15,  8), 0, LD(EAST)             | LF(FLIGHT_MODE) | LF(WARNING) },
-    { CALCULATE_LED_XY(15,  7), 0, LD(EAST)             | LF(FLIGHT_MODE) | LF(WARNING) },
-
-    { CALCULATE_LED_XY(15,  0), 0, LD(NORTH) | LD(EAST) | LF(INDICATOR) | LF(ARM_STATE) },
-
-    { CALCULATE_LED_XY( 8,  0), 0, LD(NORTH)            | LF(FLIGHT_MODE) },
-    { CALCULATE_LED_XY( 7,  0), 0, LD(NORTH)            | LF(FLIGHT_MODE) },
-
-    { CALCULATE_LED_XY( 0,  0), 0, LD(NORTH) | LD(WEST) | LF(INDICATOR) | LF(ARM_STATE) },
-
-    { CALCULATE_LED_XY( 0,  7), 0, LD(WEST)             | LF(FLIGHT_MODE) | LF(WARNING) },
-    { CALCULATE_LED_XY( 0,  8), 0, LD(WEST)             | LF(FLIGHT_MODE) | LF(WARNING) },
-
-    { CALCULATE_LED_XY( 0, 15), 0, LD(SOUTH) | LD(WEST) | LF(INDICATOR) | LF(ARM_STATE) },
-
-    { CALCULATE_LED_XY( 7, 15), 0, LD(SOUTH)            | LF(FLIGHT_MODE) | LF(WARNING) },
-    { CALCULATE_LED_XY( 8, 15), 0, LD(SOUTH)            | LF(FLIGHT_MODE) | LF(WARNING) },
-
-    { CALCULATE_LED_XY( 7,  7), 0, LD(UP)               | LF(FLIGHT_MODE) | LF(WARNING) },
-    { CALCULATE_LED_XY( 8,  7), 0, LD(UP)               | LF(FLIGHT_MODE) | LF(WARNING) },
-    { CALCULATE_LED_XY( 7,  8), 0, LD(DOWN)             | LF(FLIGHT_MODE) | LF(WARNING) },
-    { CALCULATE_LED_XY( 8,  8), 0, LD(DOWN)             | LF(FLIGHT_MODE) | LF(WARNING) },
-
-    { CALCULATE_LED_XY( 8,  9), 3, LF(THRUST_RING)},
-    { CALCULATE_LED_XY( 9, 10), 3, LF(THRUST_RING)},
-    { CALCULATE_LED_XY(10, 11), 3, LF(THRUST_RING)},
-    { CALCULATE_LED_XY(10, 12), 3, LF(THRUST_RING)},
-    { CALCULATE_LED_XY( 9, 13), 3, LF(THRUST_RING)},
-    { CALCULATE_LED_XY( 8, 14), 3, LF(THRUST_RING)},
-    { CALCULATE_LED_XY( 7, 14), 3, LF(THRUST_RING)},
-    { CALCULATE_LED_XY( 6, 13), 3, LF(THRUST_RING)},
-    { CALCULATE_LED_XY( 5, 12), 3, LF(THRUST_RING)},
-    { CALCULATE_LED_XY( 5, 11), 3, LF(THRUST_RING)},
-    { CALCULATE_LED_XY( 6, 10), 3, LF(THRUST_RING)},
-    { CALCULATE_LED_XY( 7,  9), 3, LF(THRUST_RING)},
-
+    { CALCULATE_LED_XY( 9, 15), 0, LD(SOUTH) | LF(WARNING) | LF(ARM_STATE) },
+    { CALCULATE_LED_XY( 9, 14), 0, LD(SOUTH) | LF(WARNING) | LF(ARM_STATE) },
+    { CALCULATE_LED_XY( 8, 15), 0, LD(SOUTH) | LF(WARNING) | LF(ARM_STATE) },
+    { CALCULATE_LED_XY( 7, 15), 0, LD(SOUTH) | LF(WARNING) | LF(ARM_STATE) },
+    { CALCULATE_LED_XY( 7, 14), 0, LD(SOUTH) | LF(WARNING) | LF(ARM_STATE) },
 };
 #endif
 
@@ -202,14 +169,14 @@ static const modeColorIndexes_t defaultModeColors[] = {
 };
 
 static const specialColorIndexes_t defaultSpecialColors[] = {
-    {{ [LED_SCOLOR_DISARMED]        = COLOR_GREEN,
-       [LED_SCOLOR_ARMED]           = COLOR_BLUE,
+    {{ [LED_SCOLOR_DISARMED]        = COLOR_LIGHT_BLUE,
+       [LED_SCOLOR_ARMED]           = COLOR_GREEN,
        [LED_SCOLOR_ANIMATION]       = COLOR_WHITE,
        [LED_SCOLOR_BACKGROUND]      = COLOR_BLACK,
        [LED_SCOLOR_BLINKBACKGROUND] = COLOR_BLACK,
        [LED_SCOLOR_GPSNOSATS]       = COLOR_RED,
-       [LED_SCOLOR_GPSNOLOCK]       = COLOR_ORANGE,
-       [LED_SCOLOR_GPSLOCKED]       = COLOR_GREEN,
+       [LED_SCOLOR_GPSNOLOCK]       = COLOR_BLUE,
+       [LED_SCOLOR_GPSLOCKED]       = COLOR_LIGHT_BLUE,
     }}
 };
 

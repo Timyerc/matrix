@@ -66,7 +66,7 @@
 PG_REGISTER_WITH_RESET_TEMPLATE(armingConfig_t, armingConfig, PG_ARMING_CONFIG, 0);
 
 PG_REGISTER_PROFILE_WITH_RESET_TEMPLATE(rcControlsConfig_t, rcControlsConfig, PG_RC_CONTROLS_CONFIG, 0);
-PG_REGISTER_PROFILE(modeActivationProfile_t, modeActivationProfile, PG_MODE_ACTIVATION_PROFILE, 0);
+PG_REGISTER_PROFILE_WITH_RESET_FN(modeActivationProfile_t, modeActivationProfile, PG_MODE_ACTIVATION_PROFILE, 0);
 
 // true if arming is done via the sticks (as opposed to a switch)
 static bool isUsingSticksToArm = true;
@@ -89,6 +89,21 @@ PG_RESET_TEMPLATE(armingConfig_t, armingConfig,
     .auto_disarm_delay = 5,
     .max_arm_angle = 25,
 );
+
+void pgResetFn_modeActivationProfile(modeActivationProfile_t *modeActivationProfile)
+{
+    memset(modeActivationProfile, 0, sizeof(modeActivationProfile_t));
+
+    modeActivationProfile->modeActivationConditions[0].modeId = BOXANGLE;
+    modeActivationProfile->modeActivationConditions[0].auxChannelIndex = 0;
+    modeActivationProfile->modeActivationConditions[0].range.startStep = 16;
+    modeActivationProfile->modeActivationConditions[0].range.endStep = 48;
+
+    modeActivationProfile->modeActivationConditions[1].modeId = BOXBARO;
+    modeActivationProfile->modeActivationConditions[1].auxChannelIndex = 0;
+    modeActivationProfile->modeActivationConditions[1].range.startStep = 32;
+    modeActivationProfile->modeActivationConditions[1].range.endStep = 48;
+}
 
 
 bool isUsingSticksForArming(void)

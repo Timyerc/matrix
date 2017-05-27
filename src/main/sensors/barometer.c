@@ -55,7 +55,7 @@ PG_RESET_TEMPLATE(barometerConfig_t, barometerConfig,
     .baro_sample_count = 21,
     .baro_noise_lpf = 0.6f,
     .baro_cf_vel = 0.985f,
-    .baro_cf_alt = 0.965f,
+    .baro_cf_alt = 0.965f,//0.965
 );
 
 
