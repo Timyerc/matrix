@@ -179,6 +179,10 @@
 #define IPX_UOSDUPLOAD									4
 #define IPX_BOSDUPLOAD									5
 #define IPX_ENDOSDUPLOAD                6
+#define IPX_ENTERVTX										7
+#define IPX_EXITVTX											8
+#define IPX_VTXOFFDELAY									9
+#define IPX_SETVTXOFFDELAY							10
 
 //
 // Baseflight MSP commands (if enabled they exist in Cleanflight)

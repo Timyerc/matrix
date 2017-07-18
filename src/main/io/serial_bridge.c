@@ -25,6 +25,7 @@
 #include "io/serial_msp.h"
 #include "io/serial_4way.h"
 #include "io/serial_bridge.h"
+#include "io/beeper.h"
 
 #include "drivers/gpio.h"
 #include "drivers/system.h"
@@ -427,6 +428,7 @@ void bridgeSerialProcess(void)
 	}
 
 	if(ipxSerialMode == IPXSERIAL_UOSDUPLOAD || ipxSerialMode == IPXSERIAL_BOSDUPLOAD) {
+		beeper(BEEPER_SILENCE);
 		uint8_t retryCnt=0;
 		while(retryCnt++<3) {
 			RESET_OSD;

@@ -54,4 +54,5 @@ PG_REGISTER_WITH_RESET_TEMPLATE(vtxConfig_t, vtxConfig, PG_VTX_CONFIG, 0);
 PG_RESET_TEMPLATE(vtxConfig_t, vtxConfig,
     .vtx_channel = 0,
     .vtx_power = 0,
+    .vtx_delay = 30,
 );

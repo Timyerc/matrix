@@ -22,6 +22,7 @@
 
 extern uint16_t const vtx_freq[];
 extern uint8_t current_vtx_channel;
+extern uint8_t current_vtx_delay;
 
 #define RTC6705_POWER_ON      GPIO_ResetBits(RTC6705_POWER_SW_GPIO, RTC6705_POWER_SW_PIN)
 #define RTC6705_POWER_OFF     GPIO_SetBits(RTC6705_POWER_SW_GPIO, RTC6705_POWER_SW_PIN)

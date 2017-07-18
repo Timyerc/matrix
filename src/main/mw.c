@@ -122,6 +122,8 @@ uint16_t filteredCycleTime;
 
 extern pidControllerFuncPtr pid_controller;
 
+uint8_t isEnterVtxConfig = false;
+
 void applyAndSaveAccelerometerTrimsDelta(rollAndPitchTrims_t *rollAndPitchTrimsDelta)
 {
     accelerometerConfig()->accelerometerTrims.values.roll += rollAndPitchTrimsDelta->values.roll;
@@ -942,13 +944,20 @@ void taskHandleVtxSwitch(void)
 {
     static uint8_t vtxTurnOffDelay = 0;
 
-    if (ARMING_FLAG(ARMED)) {
+    if (isEnterVtxConfig) {
         vtxTurnOffDelay = 0;
+        if(!RTC6705_POWER_ON_FLAG()) {
+            ENABLE_RTC6705_POWER_ON_FLAG();
+        }
     } else {
-        if(++vtxTurnOffDelay > 60) {
-            vtxTurnOffDelay = 60;
-            if(RTC6705_POWER_ON_FLAG()) {
-                DISABLE_RTC6705_POWER_ON_FLAG();
+        if (ARMING_FLAG(ARMED)) {
+            vtxTurnOffDelay = 0;
+        } else {
+            if(++vtxTurnOffDelay > current_vtx_delay) {
+                vtxTurnOffDelay = current_vtx_delay;
+                if(RTC6705_POWER_ON_FLAG()) {
+                    DISABLE_RTC6705_POWER_ON_FLAG();
+                }
             }
         }
     }

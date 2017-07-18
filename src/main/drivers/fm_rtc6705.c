@@ -49,6 +49,7 @@ const uint16_t vtx_freq[] =
 };
 
 uint8_t current_vtx_channel;
+uint8_t current_vtx_delay;
 
 void rtc6705_init(void)
 {

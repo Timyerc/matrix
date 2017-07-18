@@ -327,6 +327,7 @@ void init(void)
 #ifdef USE_RTC6705
     rtc6705_init();
     current_vtx_channel = vtxConfig()->vtx_channel;
+    current_vtx_delay = vtxConfig()->vtx_delay;
     delay(100);
     ENABLE_RTC6705_POWER_ON_FLAG();
 #endif

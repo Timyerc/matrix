@@ -104,6 +104,8 @@ extern uint16_t cycleTime; // FIXME dependency on mw.c
 extern uint16_t rssi; // FIXME dependency on mw.c
 extern void resetPidProfile(pidProfile_t *pidProfile);
 
+extern uint8_t isEnterVtxConfig;
+
 static const char * const flightControllerIdentifier = CLEANFLIGHT_IDENTIFIER; // 4 UPPER CASE alpha numeric characters that identify the flight controller.
 static const char * const boardIdentifier = TARGET_BOARD_IDENTIFIER;
 
@@ -1075,6 +1077,26 @@ static int processOutCommand(mspPacket_t *cmd, mspPacket_t *reply)
                     ipxSerialMode = IPXSERIAL_BOSDUPLOAD;
                     sbufWriteU8(dst, IPX_BOSDUPLOAD);
                     break;
+                case IPX_ENTERVTX:
+                    isEnterVtxConfig = true;
+                    sbufWriteU8(dst, IPX_ENTERVTX);
+                    break;
+                case IPX_EXITVTX:
+                    isEnterVtxConfig = false;
+                    sbufWriteU8(dst, IPX_EXITVTX);
+                    break;
+                case IPX_VTXOFFDELAY:
+                    //isEnterVtxConfig = false;
+                    sbufWriteU8(dst, IPX_VTXOFFDELAY);
+                    sbufWriteU8(dst, current_vtx_delay);
+                    break;
+                case IPX_SETVTXOFFDELAY: {
+                    uint8_t vtx_delay = sbufReadU8(src);
+                    vtxConfig()->vtx_delay = vtx_delay;
+                    current_vtx_delay = vtx_delay;
+                    sbufWriteU8(dst, IPX_SETVTXOFFDELAY);
+                    break;
+                }
                 default:
                     return 0;
             }

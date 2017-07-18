@@ -20,6 +20,7 @@
 typedef struct vtxConfig_s {
 	uint8_t vtx_channel;
 	uint8_t vtx_power;
+	uint8_t vtx_delay;
 } vtxConfig_t;
 
 PG_DECLARE(vtxConfig_t, vtxConfig);
